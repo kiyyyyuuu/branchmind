@@ -1,9 +1,21 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.core.database import Base, engine
+import app.models
+
+from app.api.v1.auth import router as auth_router
+
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(
+    title="BranchMind API"
+)
+
+app.include_router(auth_router)
+
 
 @app.get("/")
-def home():
+def root():
     return {
-        "message": "Welcome to BranchMind Backend 🚀"
+        "message": "BranchMind Backend Running 🚀"
     }
